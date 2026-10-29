@@ -4,11 +4,11 @@ Entrega para el agente que creará el repositorio y publicará el paquete en pub
 
 ## Objetivo y alcance
 
-- Paquete que se publica: `network_json_devtools`, desde la raíz de este proyecto.
-- Versión preparada: `0.1.2`.
+- Paquete publicado: `network_json_devtools`, desde la raíz de este proyecto.
+- Versión publicada: `0.1.2`.
 - El subproyecto `packages/network_json_extension` compila la interfaz y conserva `publish_to: none`; no se publica como paquete independiente.
-- No se ha creado ni subido un repositorio remoto desde esta entrega. No se ha ejecutado la publicación real en pub.dev.
-- El propietario ya tiene cuenta en pub.dev. El inicio de sesión y la autorización finales corresponden a su cuenta.
+- Repositorio público en GitHub: `https://github.com/ModLovelace/network_json_devtools`.
+- Paquete en pub.dev: `https://pub.dev/packages/network_json_devtools`.
 
 ## Licencia ya elegida
 
@@ -113,23 +113,29 @@ flutter pub add dev:network_json_devtools
 - Comprobar captura HTTP, carga del PEM y descifrado con datos de prueba compatibles.
 - Registrar la versión publicada en Git y actualizar las instrucciones de instalación si fuese necesario.
 
-## Estado de validación de esta entrega
+## Estado de validación y publicación
 
-Verificado el 2026-10-28:
+Verificado y publicado el 2026-10-28:
 
 | Comprobación | Resultado |
 | --- | --- |
 | Licencia | Texto oficial CC BY-NC 4.0, atribución propia y avisos de terceros incluidos. |
+| Repositorio público | Creado y sincronizado en `https://github.com/ModLovelace/network_json_devtools` (rama `main`, tag `v0.1.2`). |
+| Metadatos | `repository` e `issue_tracker` configurados en `pubspec.yaml`; `issueTracker` actualizado en `extension/devtools/config.yaml`. |
 | `dart test` | 15 pruebas correctas. |
 | `dart analyze lib test tool example` | Sin incidencias. |
-| Interfaz | 9 pruebas correctas y análisis Flutter sin incidencias después de la limpieza. |
+| Interfaz (`packages/network_json_extension`) | 9 pruebas correctas y análisis Flutter sin incidencias. |
 | `dart run tool/verify_vm.dart` | Captura HTTP local y descifrado de ambos cuerpos correctos. |
-| `dart run tool/build.dart` | Compilación release y validador oficial de DevTools correctos; demo recompilada. |
-| `dart pub publish --dry-run` | Sin errores de validación; una advertencia por faltar `homepage` o `repository`. |
+| `dart run tool/build.dart` | Compilación release y validador oficial de DevTools correctos (`Extension validation successful`). |
+| `dart pub publish --dry-run` | Sin errores y 0 advertencias (`Package has 0 warnings`). |
 | Tamaño comprimido estimado por Pub | 12 MB. |
 | Limpieza | Sin referencias al proyecto original, fixtures anteriores ni diagramas antiguos en las fuentes y el paquete distribuible. |
-| Publicación real | No ejecutada. |
+| Publicación real (`dart pub publish`) | Publicada la versión `0.1.2` en `https://pub.dev/packages/network_json_devtools`. |
+| Verificación post-publicación | Instalado desde pub.dev con `flutter pub add dev:network_json_devtools` en una app temporal (`sha256: 54d85bd00070a22c4861bfd9d6a28d53a54980d63a33bc779116d0a7dae4fb5c`) y validado el bundle descargado en pub-cache con `devtools_extensions validate`. |
 
-El SDK utilizado devuelve código 65 cuando la simulación tiene advertencias. En esta entrega la única advertencia pendiente depende de crear el repositorio y añadir su URL real. Después de completar ese dato, repetir la simulación y comprobar que termina sin advertencias.
+## Pendientes posteriores
+
+- Ningún bloqueo técnico pendiente para `0.1.2`.
+- Cuando se publiquen futuras versiones, ejecutar `dart run tool/build.dart` antes de `dart pub publish` para asegurar que `doc/` y `extension/devtools/build/` estén actualizados.
 
 Se retiraron los fixtures anteriores, los PEM persistentes y los diagramas antiguos. Las pruebas usan datos genéricos generados durante la ejecución y conservan una comprobación independiente con OpenSSL. La documentación pública se genera en `doc/`.
