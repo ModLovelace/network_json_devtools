@@ -1,6 +1,6 @@
 # Third-party notices
 
-The Network JSON license applies to the original material of this package. Third-party code, runtime files, fonts, and tooling retain their respective licenses.
+The MIT License in LICENSE applies to the original Network JSON material in this package. Third-party code, runtime files, fonts, and tooling retain their respective licenses.
 
 ## Compiled Flutter extension
 

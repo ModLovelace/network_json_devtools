@@ -25,7 +25,7 @@ dev_dependencies:
 
 ## Licencia
 
-El código y la documentación propios de Network JSON se distribuyen bajo **Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)**. Permite compartir y adaptar el material para fines no comerciales, conservando la atribución, el enlace a la licencia y la indicación de cambios conforme a sus términos.
+El código y la documentación propios de Network JSON se distribuyen bajo la **licencia MIT**. Permite usar, modificar y redistribuir el software, incluso comercialmente, conservando los avisos de copyright y licencia. El software se proporciona sin garantías, según los términos de la licencia.
 
 Consulta [LICENSE](LICENSE), [NOTICE](NOTICE) y los [avisos de terceros](THIRD_PARTY_NOTICES.md). Los componentes de terceros conservan sus licencias respectivas.
 
@@ -63,7 +63,7 @@ Después ejecuta `flutter pub get` en la aplicación. El instalador no copia lla
 
 El diálogo conserva la llave durante la importación y evita el cierre por clics fuera o Escape. **Cancelar** o el botón de cerrar descartan los cambios pendientes. Un archivo inválido no sustituye una llave que ya se haya cargado.
 
-Si actualizas una instalación local abierta, ejecuta `flutter pub get` en tu aplicación y reinicia VS Code antes de volver a abrir DevTools. El encabezado de esta versión indica **v0.1.2**.
+Si actualizas una instalación local abierta, ejecuta `flutter pub get` en tu aplicación y reinicia VS Code antes de volver a abrir DevTools. Comprueba la versión instalada en la lista de extensiones de DevTools.
 
 ## Modos de descifrado
 

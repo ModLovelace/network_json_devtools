@@ -20,8 +20,9 @@ Future<void> main() async {
     final match = RegExp(
       r'The Dart VM service is listening on (http://\S+)',
     ).firstMatch(line);
-    if (match != null && !uriReady.isCompleted)
+    if (match != null && !uriReady.isCompleted) {
       uriReady.complete(Uri.parse(match.group(1)!));
+    }
   }
 
   final out = child.stdout

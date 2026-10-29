@@ -45,9 +45,10 @@ Un cuerpo sin un campo cifrado elegible se muestra como original. Los errores de
 
 ## Referencias de implementación
 
-- `lib/src/decryption.dart:19`: configuración y campos predeterminados.
-- `lib/src/decryption.dart:95`: lectura de la llave privada y validación de AES manual.
-- `lib/src/decryption.dart:122`: resolución de valores por par request/response.
-- `lib/src/decryption.dart:169`: apertura del sobre RSA.
-- `lib/src/decryption.dart:193`: AES-CBC, PKCS7, UTF-8 y JSON.
-- `lib/src/decryption.dart:215`: longitudes admitidas de llave e IV.
+- `lib/src/decryption.dart:52`: configuración y campos predeterminados.
+- `lib/src/decryption.dart:184`: lectura de la llave privada y validación de AES manual.
+- `lib/src/decryption.dart:214`: resolución de valores por par request/response.
+- `lib/src/decryption.dart:272`: apertura del sobre RSA.
+- `lib/src/decryption.dart:310`: AES-CBC, PKCS7, UTF-8 y JSON.
+- `lib/src/decryption.dart:336`: lectura de PEM RSA PKCS#1 y PKCS#8.
+- `lib/src/decryption.dart:383`: longitudes admitidas de llave e IV.

@@ -3,7 +3,8 @@ import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
-import 'package:encrypt/encrypt.dart' as enc;
+import 'package:network_json_devtools/network_json_devtools.dart'
+    show encodeHex;
 import 'package:pointycastle/asn1.dart';
 import 'package:pointycastle/export.dart';
 
@@ -37,10 +38,7 @@ class SampleKeys {
         ),
       );
     final pair = generator.generateKeyPair();
-    return SampleKeys._(
-      pair.publicKey as RSAPublicKey,
-      pair.privateKey as RSAPrivateKey,
-    );
+    return SampleKeys._(pair.publicKey, pair.privateKey);
   }
 
   ASN1Sequence get _privateSequence {
@@ -113,7 +111,18 @@ class SampleExchange {
     response = {'ok': true, 'data': encrypt(responsePlain)};
   }
 
-  String encrypt(Object value) => enc.Encrypter(
-    enc.AES(enc.Key(key), mode: enc.AESMode.cbc),
-  ).encrypt(jsonEncode(value), iv: enc.IV(iv)).base16;
+  String encrypt(Object value) {
+    final cipher =
+        PaddedBlockCipherImpl(PKCS7Padding(), CBCBlockCipher(AESEngine()))
+          ..init(
+            true,
+            PaddedBlockCipherParameters(
+              ParametersWithIV(KeyParameter(key), iv),
+              null,
+            ),
+          );
+    return encodeHex(
+      cipher.process(Uint8List.fromList(utf8.encode(jsonEncode(value)))),
+    );
+  }
 }

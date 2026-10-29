@@ -92,7 +92,9 @@ class CaptureController extends ChangeNotifier {
         try {
           if (!_enabled.contains(id)) {
             if (!await current.isHttpProfilingAvailable(id)
-                .timeout(const Duration(seconds: 3))) continue;
+                .timeout(const Duration(seconds: 3))) {
+              continue;
+            }
             await current.httpEnableTimelineLogging(id, true)
                 .timeout(const Duration(seconds: 3));
             if (stale()) return;

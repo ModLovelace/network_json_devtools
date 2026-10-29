@@ -219,10 +219,12 @@ class _InspectorPageState extends State<InspectorPage> {
 
   Widget _details() {
     final r = capture.selected;
-    if (r == null) return const Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
+    if (r == null) {
+      return const Center(child: Column(mainAxisSize: MainAxisSize.min, children: [
       Icon(Icons.data_object, size: 38, color: lineColor), SizedBox(height: 15),
       Text('Selecciona una petición', style: TextStyle(fontSize: 14)), SizedBox(height: 8),
       Text('Inspecciona el request y el response en JSON.', style: TextStyle(color: muted, fontSize: 12))]));
+    }
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Container(height: 39, decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: lineColor))),
         child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: [

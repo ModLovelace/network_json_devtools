@@ -1,5 +1,13 @@
 # Historial de cambios
 
+## 0.1.3 · 2026-10-29
+
+- Documentación Dartdoc de toda la API pública de configuración, descifrado y perfil HTTP.
+- Reglas de análisis de Dart alineadas con las comprobaciones de pub.dev.
+- Actualización a PointyCastle 4 y eliminación de `encrypt` y su dependencia transitiva `js`, descontinuada.
+- Lectura local de PEM RSA PKCS#1/PKCS#8 mediante ASN.1 de PointyCastle, con los mismos algoritmos de descifrado.
+- Cambio de licencia a MIT para el material propio, conservando la atribución a ModLovelace y los avisos de terceros. La versión 0.1.2 publicada conserva su licencia original.
+
 ## 0.1.2 · 2026-10-28
 
 - Licencia CC BY-NC 4.0 para el material propio, atribución y conservación de avisos de terceros.

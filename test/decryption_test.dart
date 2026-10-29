@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:pointycastle/asn1.dart';
 import '../example/support/sample_exchange.dart';
 import 'package:network_json_devtools/network_json_devtools.dart';
 import 'package:test/test.dart';
@@ -45,7 +46,22 @@ void main() {
           expect(result.exitCode, 0, reason: result.stderr.toString());
         }
 
-        await File('${temporary.path}/private.pem').writeAsString(pem);
+        await openssl([
+          'genpkey',
+          '-algorithm',
+          'RSA',
+          '-pkeyopt',
+          'rsa_keygen_bits:2048',
+          '-out',
+          'private.pem',
+        ]);
+        final opensslSession = DecryptionSession(
+          DecryptionSettings(
+            privateKeyPem: await File(
+              '${temporary.path}/private.pem',
+            ).readAsString(),
+          ),
+        );
         await openssl([
           'pkey',
           '-in',
@@ -105,9 +121,45 @@ void main() {
           ),
         };
         expect(
-          rsa.decode(jsonEncode(request), jsonEncode(response)).response.value,
+          opensslSession
+              .decode(jsonEncode(request), jsonEncode(response))
+              .response
+              .value,
           c.responsePlain,
         );
+        await openssl([
+          'pkey',
+          '-in',
+          'private.pem',
+          '-traditional',
+          '-out',
+          'pkcs1.pem',
+        ]);
+        await openssl([
+          'pkcs8',
+          '-topk8',
+          '-nocrypt',
+          '-in',
+          'private.pem',
+          '-out',
+          'pkcs8.pem',
+        ]);
+        for (final name in ['pkcs1.pem', 'pkcs8.pem']) {
+          final session = DecryptionSession(
+            DecryptionSettings(
+              privateKeyPem: await File(
+                '${temporary.path}/$name',
+              ).readAsString(),
+            ),
+          );
+          expect(
+            session
+                .decode(jsonEncode(request), jsonEncode(response))
+                .response
+                .value,
+            c.responsePlain,
+          );
+        }
       } finally {
         await temporary.delete(recursive: true);
       }
@@ -142,6 +194,70 @@ void main() {
           (e) => e.message,
           'message',
           contains('privada'),
+        ),
+      ),
+    );
+  });
+
+  test('PEM accepts surrounding whitespace and Windows line endings', () {
+    final session = DecryptionSession(
+      DecryptionSettings(
+        privateKeyPem: '  \n${pem.replaceAll('\n', '\r\n')}\n  ',
+      ),
+    );
+    expect(
+      decode(session, cases.first).request.value,
+      cases.first.requestPlain,
+    );
+  });
+
+  test(
+    'Malformed PEM and trailing DER are rejected without exposing the key',
+    () {
+      final der = ASN1Utils.getBytesFromPEMString(pem);
+      final withTrailingData =
+          '-----BEGIN PRIVATE KEY-----\n'
+          '${base64Encode([...der, 0])}\n-----END PRIVATE KEY-----';
+      for (final invalid in [
+        'not a PEM',
+        pem.replaceFirst(
+          '-----END PRIVATE KEY-----',
+          '-----END RSA PRIVATE KEY-----',
+        ),
+        '-----BEGIN PRIVATE KEY-----\n!invalid!\n-----END PRIVATE KEY-----',
+        pem.replaceAll('PRIVATE KEY', 'ENCRYPTED PRIVATE KEY'),
+        withTrailingData,
+      ]) {
+        expect(
+          () => DecryptionSession(DecryptionSettings(privateKeyPem: invalid)),
+          throwsA(
+            isA<DecryptionFailure>().having(
+              (e) => e.message,
+              'safe message',
+              allOf(contains('PEM inválido'), isNot(contains(invalid))),
+            ),
+          ),
+        );
+      }
+    },
+  );
+
+  test('PKCS#8 with a non-RSA algorithm is rejected', () {
+    final info = ASN1PrivateKeyInfo.fromPkcs1RsaPem(keys.privatePkcs1Pem)
+      ..privateKeyAlgorithm = ASN1AlgorithmIdentifier.fromIdentifier(
+        '1.2.840.10045.2.1',
+      );
+    final otherAlgorithm =
+        '-----BEGIN PRIVATE KEY-----\n'
+        '${base64Encode(info.encode())}\n-----END PRIVATE KEY-----';
+    expect(
+      () =>
+          DecryptionSession(DecryptionSettings(privateKeyPem: otherAlgorithm)),
+      throwsA(
+        isA<DecryptionFailure>().having(
+          (e) => e.message,
+          'message',
+          contains('PEM inválido'),
         ),
       ),
     );

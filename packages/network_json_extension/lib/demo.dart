@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:typed_data';
-import 'package:encrypt/encrypt.dart' as enc;
+import 'package:pointycastle/export.dart';
 import 'package:network_json_devtools/network_json_devtools.dart';
 import 'package:vm_service/vm_service.dart';
 
@@ -11,12 +11,24 @@ const demoSettings = DecryptionSettings(
 );
 
 List<NetworkRecord> demoRecords() {
-  final cipher = enc.Encrypter(
-    enc.AES(enc.Key.fromBase16(demoSettings.aesKey), mode: enc.AESMode.cbc),
-  );
-  String encrypted(Object json) => cipher
-      .encrypt(jsonEncode(json), iv: enc.IV.fromBase16(demoSettings.iv))
-      .base16;
+  String encrypted(Object value) {
+    final cipher =
+        PaddedBlockCipherImpl(PKCS7Padding(), CBCBlockCipher(AESEngine()))
+          ..init(
+            true,
+            PaddedBlockCipherParameters(
+              ParametersWithIV(
+                KeyParameter(decodeBytes(demoSettings.aesKey, ByteFormat.hex)),
+                decodeBytes(demoSettings.iv, ByteFormat.hex),
+              ),
+              null,
+            ),
+          );
+    return encodeHex(
+      cipher.process(Uint8List.fromList(utf8.encode(jsonEncode(value)))),
+    );
+  }
+
   final now = DateTime.now();
   return [
     for (var i = 0; i < 4; i++)
