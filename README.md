@@ -20,7 +20,7 @@ flutter pub add dev:network_json_devtools
 
 ```yaml
 dev_dependencies:
-  network_json_devtools: ^0.1.2
+  network_json_devtools: ^0.1.4
 ```
 
 ## Licencia

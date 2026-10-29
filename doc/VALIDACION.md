@@ -53,6 +53,22 @@ Los 54 elementos de la API pública tienen documentación Dartdoc (100 %). Se ha
 
 Las 18 pruebas Dart y las 9 de interfaz pasaron, al igual que ambos analizadores, la captura HTTP de una VM local y el validador de DevTools. La interoperabilidad incluye llaves generadas por OpenSSL, sobres RSA-OAEP SHA-1 y cuerpos AES-CBC, además de errores de formato y de algoritmo del PEM.
 
-El propietario eligió MIT para el material propio de 0.1.3. La licencia está reconocida por OSI y permite obtener los 30 puntos de convenciones de archivos. Se conservan la atribución a ModLovelace y los avisos de terceros. La versión 0.1.2 publicada conserva su licencia original. El resultado definitivo en pub.dev requiere publicar la nueva versión y que el servicio vuelva a analizarla; la medición local no modifica el puntaje de 0.1.2.
+El propietario eligió MIT para el material propio de 0.1.3. La licencia está reconocida por OSI y permite obtener los 30 puntos de convenciones de archivos. Se conservan la atribución a ModLovelace y los avisos de terceros. La versión 0.1.2 publicada conserva su licencia original. El resultado definitivo en pub.dev requiere que el servicio complete el análisis de la versión 0.1.3; la medición local no modifica el puntaje histórico de 0.1.2.
 
-La simulación inicial `dart pub publish --dry-run` no detectó errores de paquete. Su única advertencia correspondió a modificaciones locales sin confirmar en Git (código de salida 65). Antes de publicar 0.1.3, repetir la simulación desde un estado limpio de Git y comprobar que termina sin advertencias. No se ejecutó la publicación real de esta versión.
+La simulación final `dart pub publish --dry-run`, desde Git limpio, terminó sin errores ni advertencias (código de salida 0).
+
+## Publicación 0.1.3 · 2026-10-29
+
+Se publicó [network_json_devtools 0.1.3](https://pub.dev/packages/network_json_devtools/versions/0.1.3) desde el commit `5c11ab4652b7067aa94d9bbfe5e33d25ebf01ac5`, con licencia MIT. El servidor confirmó la publicación y la API pública del registro devolvió la nueva versión.
+
+SHA-256 del archivo publicado: `34cf94fa3d424db5105830ff068e1dff2c7985d69ca383af2398afec5dd3ae3d`.
+
+Se comprobó la instalación desde pub.dev en un proyecto temporal, la importación de la API y la presencia del texto MIT, el archivo de configuración 0.1.3, JavaScript compilado y avisos de licencia de la extensión. La publicación no omite validaciones ni utiliza `--force`.
+
+El [puntaje público](https://pub.dev/packages/network_json_devtools/score) se actualiza cuando pub.dev termina su análisis. El resultado local verificado de esta versión es 160/160.
+
+## Corrección del README · 0.1.4 · 2026-10-29
+
+La versión 0.1.3 se publicó con un ejemplo de instalación que todavía indicaba `^0.1.2`. La actualización a 0.1.4 corrige ese ejemplo a `^0.1.4` y sincroniza la versión en el paquete, la interfaz y la configuración de DevTools. No cambia la API, los algoritmos ni la licencia MIT.
+
+`tool/build.dart` comprueba las versiones de los tres manifiestos y del ejemplo del README antes de compilar, para detectar futuras discrepancias.

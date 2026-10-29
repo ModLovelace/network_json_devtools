@@ -1,5 +1,11 @@
 # Historial de cambios
 
+## 0.1.4 · 2026-10-29
+
+- Corrección del ejemplo de instalación del README para que coincida con la versión publicada.
+- Comprobación de versiones en la compilación para mantener sincronizados el paquete, la interfaz, DevTools y el README.
+- Mismos algoritmos, API y licencia MIT de 0.1.3.
+
 ## 0.1.3 · 2026-10-29
 
 - Documentación Dartdoc de toda la API pública de configuración, descifrado y perfil HTTP.
