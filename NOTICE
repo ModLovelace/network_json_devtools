@@ -1,0 +1,17 @@
+Network JSON
+Copyright (c) 2026 ModLovelace
+
+SPDX-License-Identifier: CC-BY-NC-4.0
+
+The original Network JSON code and documentation are licensed under the
+Creative Commons Attribution-NonCommercial 4.0 International license.
+See LICENSE for the complete terms:
+https://creativecommons.org/licenses/by-nc/4.0/
+
+When redistributing or adapting the original material, retain appropriate
+attribution to ModLovelace, a link to the license, and an indication of changes,
+in accordance with the license.
+
+Third-party components retain their own licenses. The license above does not
+replace the licenses of Flutter, Dart packages, fonts, or CanvasKit. See THIRD_PARTY_NOTICES.md and the notices distributed
+with the compiled extension.

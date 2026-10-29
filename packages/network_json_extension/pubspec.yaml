@@ -1,0 +1,20 @@
+name: network_json_extension
+description: Interfaz de DevTools para Network JSON.
+publish_to: none
+version: 0.1.2
+environment:
+  sdk: '>=3.8.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  devtools_extensions: ^0.4.0
+  vm_service: ^15.0.0
+  web: ^1.1.1
+  cupertino_icons: ^1.0.8
+  network_json_devtools:
+    path: ../..
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true

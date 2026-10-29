@@ -1,0 +1,18 @@
+# Local caches and editor state.
+**/.dart_tool/
+**/.git/
+**/.idea/
+**/.metadata
+**/.flutter-plugins-dependencies
+devtools_options.yaml
+.packages
+
+# Development outputs. Keep extension/devtools/build/ in the package.
+/build/
+/coverage/
+/packages/network_json_extension/build/
+/docs/
+
+*.key
+*.pem
+*.iml
