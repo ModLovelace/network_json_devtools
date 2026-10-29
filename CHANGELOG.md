@@ -1,5 +1,11 @@
 # Historial de cambios
 
+## 0.1.5 · 2026-10-29
+
+- Menú contextual con clic derecho o pulsación larga para copiar valores de la tabla y URLs completas.
+- Botón «Copiar todo» que reúne URL, request y response en un JSON, usando la vista descifrada u original seleccionada.
+- Menús de Flutter habilitados en el navegador y confirmación o aviso de error al copiar.
+
 ## 0.1.4 · 2026-10-29
 
 - Corrección del ejemplo de instalación del README para que coincida con la versión publicada.

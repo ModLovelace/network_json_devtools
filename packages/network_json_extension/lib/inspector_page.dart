@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
@@ -94,6 +95,41 @@ class _InspectorPageState extends State<InspectorPage> {
     }
   }
 
+  void _showCellMenu(NetworkRecord record, Offset position, String label, String value) {
+    _cachedView = null;
+    capture.select(record);
+    final overlay = Overlay.of(context).context.findRenderObject()! as RenderBox;
+    final point = overlay.globalToLocal(position);
+    unawaited(showMenu<void>(
+      context: context,
+      position: RelativeRect.fromSize(Rect.fromLTWH(point.dx, point.dy, 0, 0), overlay.size),
+      items: [
+        PopupMenuItem<void>(
+          onTap: () => unawaited(_copy(value)),
+          child: Row(mainAxisSize: MainAxisSize.min, children: [
+            const Icon(Icons.copy_outlined, size: 16), const SizedBox(width: 10), Text(label),
+          ]),
+        ),
+        if (label != 'Copiar URL') PopupMenuItem<void>(
+          onTap: () => unawaited(_copy(record.url)),
+          child: const Row(mainAxisSize: MainAxisSize.min, children: [
+            Icon(Icons.link, size: 16), SizedBox(width: 10), Text('Copiar URL'),
+          ]),
+        ),
+      ],
+    ));
+  }
+
+  void _copyExchange(NetworkRecord record) {
+    final view = decrypted ? _decoded(record)
+        : DecryptionSession(const DecryptionSettings()).decode(record.requestText, record.responseText);
+    unawaited(_copy(const JsonEncoder.withIndent('  ').convert({
+      'url': record.url,
+      'request': view.request.value,
+      'response': view.response.value,
+    })));
+  }
+
   @override
   Widget build(BuildContext context) => Theme(data: inspectorTheme(),
     child: Scaffold(body: Column(children: [
@@ -173,13 +209,24 @@ class _InspectorPageState extends State<InspectorPage> {
     return LayoutBuilder(builder: (context, box) {
       final width = math.max(590.0, box.maxWidth);
       final widths = [66.0, width - 66 - 55 - 48 - 76 - 105, 55.0, 48.0, 76.0, 105.0];
-      Widget cells(List<Widget> values, {bool header = false}) => Row(children: [
-        for (var i = 0; i < values.length; i++) Container(width: widths[i], height: header ? 31 : 30,
+      const copyLabels = ['Copiar método', 'Copiar URL', 'Copiar estado', 'Copiar tipo', 'Copiar duración', 'Copiar hora'];
+      Widget cells(List<Widget> values, {bool header = false, NetworkRecord? record, List<String>? copyValues}) {
+        Widget cell(int i) {
+          final content = Container(width: widths[i], height: header ? 31 : 30,
           alignment: i >= 2 ? Alignment.centerRight : Alignment.centerLeft,
           padding: const EdgeInsets.symmetric(horizontal: 9),
           decoration: BoxDecoration(border: Border(right: BorderSide(color: lineColor.withValues(alpha: .6)))),
-          child: values[i]),
-      ]);
+          child: values[i]);
+          if (header) return content;
+          return GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onSecondaryTapDown: (event) => _showCellMenu(record!, event.globalPosition, copyLabels[i], copyValues![i]),
+            onLongPressStart: (event) => _showCellMenu(record!, event.globalPosition, copyLabels[i], copyValues![i]),
+            child: content,
+          );
+        }
+        return Row(children: [for (var i = 0; i < values.length; i++) cell(i)]);
+      }
       return Scrollbar(controller: tableScroll, thumbVisibility: box.maxWidth < width,
         child: SingleChildScrollView(controller: tableScroll, scrollDirection: Axis.horizontal,
           child: SizedBox(width: width, height: box.maxHeight, child: Column(children: [
@@ -194,17 +241,20 @@ class _InspectorPageState extends State<InspectorPage> {
               itemBuilder: (context, i) {
                 final r = rows[i];
                 final selected = capture.selectedKey == r.key;
-                return Material(color: selected ? const Color(0xff4b4857)
+                final copyValues = [r.method, r.url, r.error != null ? 'Error' : '${r.status ?? '…'}',
+                  r.type, _duration(r.duration), _time(r.profile.startTime)];
+                return Material(key: ValueKey(r.key), color: selected ? const Color(0xff4b4857)
                     : i.isEven ? const Color(0xff2e2e2e) : background,
                   child: InkWell(onTap: () { _cachedView = null; capture.select(r); },
                     child: DefaultTextStyle(style: const TextStyle(fontSize: 11, color: Color(0xffceced4)),
                       child: cells([
                         Text(r.method, style: TextStyle(color: r.method == 'GET' ? mint : const Color(0xffa4bddd))),
-                        Tooltip(message: r.url, child: Text(r.url, maxLines: 1, overflow: TextOverflow.ellipsis)),
+                        Tooltip(message: r.url, triggerMode: TooltipTriggerMode.manual,
+                          child: Text(r.url, maxLines: 1, overflow: TextOverflow.ellipsis)),
                         Text(r.error != null ? 'Error' : '${r.status ?? '…'}', style: TextStyle(color: r.error != null || (r.status ?? 0) >= 400 ? const Color(0xffeea39b) : mint)),
                         Text(r.type, overflow: TextOverflow.ellipsis, style: const TextStyle(color: muted)),
                         Text(_duration(r.duration)), Text(_time(r.profile.startTime)),
-                      ]))));
+                      ], record: r, copyValues: copyValues))));
               })),
           ]))));
     });
@@ -227,14 +277,18 @@ class _InspectorPageState extends State<InspectorPage> {
     }
     return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
       Container(height: 39, decoration: const BoxDecoration(border: Border(bottom: BorderSide(color: lineColor))),
-        child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: [
+        child: Row(children: [Expanded(child: SingleChildScrollView(scrollDirection: Axis.horizontal, child: Row(children: [
           for (final (i, title) in ['Overview', 'Headers', 'Request', 'Response'].indexed)
             InkWell(onTap: () => setState(() => tab = i), child: Container(
               height: 39, padding: const EdgeInsets.symmetric(horizontal: 16), alignment: Alignment.center,
               decoration: BoxDecoration(border: Border(bottom: BorderSide(color: tab == i ? accent : Colors.transparent, width: 3))),
               child: Text(title, style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600,
                 color: tab == i ? const Color(0xffe6dff8) : muted)))),
-        ]))),
+        ]))), Tooltip(message: 'Copiar URL, request y response · ${decrypted ? 'Vista descifrada' : 'Vista original'}',
+          child: TextButton.icon(onPressed: r.detail != null && !capture.loadingDetail ? () => _copyExchange(r) : null,
+            icon: const Icon(Icons.copy_all_outlined, size: 16),
+            label: const Text('Copiar todo', style: TextStyle(fontSize: 11)))), const SizedBox(width: 6),
+        ])),
       if (capture.loadingDetail) const LinearProgressIndicator(minHeight: 2, color: accent),
       if (r.detailError != null) _notice(r.detailError!, Icons.error_outline, orange),
       Expanded(child: tab == 0 ? _overview(r) : tab == 1 ? _headers(r) : _body(r)),

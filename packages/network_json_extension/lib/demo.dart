@@ -63,7 +63,7 @@ List<NetworkRecord> demoRecords() {
           isolateId: 'demo',
           method: i == 1 ? 'GET' : 'POST',
           uri: Uri.parse(
-            'https://api.example.test/v1/${['items/1', 'items', 'items/search', 'status'][i]}',
+            'https://api.example.test/v1/${['items/1?fields=id,name,enabled&include=items', 'items', 'items/search', 'status'][i]}',
           ),
           startTime: start,
           endTime: end,

@@ -72,3 +72,13 @@ El [puntaje público](https://pub.dev/packages/network_json_devtools/score) se a
 La versión 0.1.3 se publicó con un ejemplo de instalación que todavía indicaba `^0.1.2`. La actualización a 0.1.4 corrige ese ejemplo a `^0.1.4` y sincroniza la versión en el paquete, la interfaz y la configuración de DevTools. No cambia la API, los algoritmos ni la licencia MIT.
 
 `tool/build.dart` comprueba las versiones de los tres manifiestos y del ejemplo del README antes de compilar, para detectar futuras discrepancias.
+
+## Copia contextual y de la petición completa · 0.1.5 · 2026-10-29
+
+La tabla permite copiar con clic derecho o pulsación larga. El menú copia el valor de la celda y ofrece copiar la URL completa, incluidas sus opciones de consulta, aunque la dirección aparezca recortada.
+
+El botón **Copiar todo** reúne `url`, `request` y `response` en un JSON. Respeta la vista Descifrado u Original y se habilita cuando los detalles de la petición seleccionada están disponibles. Olvidar la llave elimina los cuerpos descifrados de las vistas y de las futuras copias.
+
+Se verificaron 21 pruebas de interfaz, incluyendo las acciones del menú, cancelación, pulsación larga en pantalla estrecha, cambio de petición, copia de ambas vistas, olvido de la llave y denegación del portapapeles. Los analizadores Dart y Flutter terminaron sin incidencias. La extensión y la demo compilaron y el validador oficial de DevTools pasó.
+
+Una comprobación adicional en Chrome real sobre la demo confirmó que el clic del menú escribe la URL completa en el portapapeles y que **Copiar todo** escribe los tres campos con sus cuerpos JSON descifrados. Los datos de las pruebas y de la demo son genéricos.

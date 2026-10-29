@@ -1,5 +1,5 @@
 name: network_json_devtools
-version: 0.1.4
+version: 0.1.5
 issueTracker: https://github.com/ModLovelace/network_json_devtools/issues
 materialIconCodePoint: '0xe1be'
 requiresConnection: true

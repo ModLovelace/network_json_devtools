@@ -20,7 +20,7 @@ flutter pub add dev:network_json_devtools
 
 ```yaml
 dev_dependencies:
-  network_json_devtools: ^0.1.4
+  network_json_devtools: ^0.1.5
 ```
 
 ## Licencia
@@ -81,6 +81,8 @@ El texto cifrado admite hexadecimal o Base64. Los campos del request y response 
 - Separador arrastrable y paneles apilados cuando el ancho disponible es menor de 800 px.
 - Árbol JSON con carga progresiva, texto seleccionable y copia.
 - Headers sensibles ocultos hasta pulsar **Mostrar sensibles**.
+- Clic derecho o pulsación larga sobre una celda para copiar su valor. **Copiar URL** conserva la dirección completa, aunque se vea recortada.
+- **Copiar todo** copia la URL, el request y el response de la petición seleccionada en un único JSON, respetando la vista **Descifrado** u **Original**. Se habilita cuando los detalles están disponibles.
 - Indicaciones de peticiones pendientes, errores HTTP, fallos de conexión y errores de descifrado.
 
 **Clear** solo borra la lista de esta extensión; conserva el perfil compartido con Network. La captura no altera el tráfico ni las respuestas que recibe la aplicación.
