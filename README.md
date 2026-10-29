@@ -12,7 +12,7 @@ Probado con Flutter **3.41.8**, Dart **3.11.5** y `devtools_extensions` **0.4.0*
 
 ## Instalación desde pub.dev
 
-Una vez publicada la versión 0.1.2, puedes añadirla como dependencia de desarrollo:
+Añádela como dependencia de desarrollo:
 
 ```sh
 flutter pub add dev:network_json_devtools
@@ -109,7 +109,7 @@ dart run tool/verify_vm.dart
 dart run tool/build.dart
 ```
 
-El último comando sincroniza la documentación pública de `docs/` a `doc/`, genera la interfaz Flutter web en `extension/devtools/build/` y ejecuta el validador oficial de extensiones. Los recursos de CanvasKit son locales y la página utiliza rutas relativas.
+El último comando genera la interfaz Flutter web en `extension/devtools/build/` y ejecuta el validador oficial de extensiones. Los recursos de CanvasKit son locales y la página utiliza rutas relativas.
 
 Para abrir una demostración con datos ficticios:
 
@@ -133,5 +133,4 @@ Abre el enlace de DevTools que imprime Dart, habilita la extensión y carga el P
 - [Formato de cifrado admitido](doc/FORMATO_CIFRADO.md).
 - [Verificación y pruebas](doc/VALIDACION.md).
 - [Historial de cambios](CHANGELOG.md).
-- [Instrucciones y pendientes de publicación](PUBLICACION.md).
 - [Guía oficial de extensiones de DevTools](https://docs.flutter.dev/tools/devtools/custom-tool).

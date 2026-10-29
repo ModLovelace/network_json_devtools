@@ -11,7 +11,6 @@ devtools_options.yaml
 /build/
 /coverage/
 /packages/network_json_extension/build/
-/docs/
 
 *.key
 *.pem

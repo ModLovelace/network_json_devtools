@@ -7,15 +7,6 @@ Future<void> main(List<String> args) async {
   final output = demo
       ? '${root.path}/build/demo'
       : '${root.path}/extension/devtools/build';
-  if (!demo) {
-    // Pub uses doc/; mirror the maintained documentation from docs/.
-    const publicDocuments = ['FORMATO_CIFRADO.md', 'VALIDACION.md'];
-    for (final relative in publicDocuments) {
-      final destination = File('${root.path}/doc/$relative');
-      await destination.parent.create(recursive: true);
-      await File('${root.path}/docs/$relative').copy(destination.path);
-    }
-  }
   Future<void> run(String executable, List<String> arguments) async {
     final process = await Process.start(
       executable,

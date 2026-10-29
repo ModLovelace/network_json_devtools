@@ -35,9 +35,3 @@ La prueba de interoperabilidad crea archivos temporales, cifra con `openssl pkey
 Las pruebas automatizadas verifican la implementación y una VM local de ejemplo. La compatibilidad con una API concreta requiere que utilice el [formato admitido](FORMATO_CIFRADO.md) y la llave correspondiente.
 
 Las pruebas de importación utilizan un selector controlado. El selector nativo del editor requiere además una comprobación manual.
-
-## Entrega 0.1.2 · 2026-10-28
-
-Se verificaron 15 pruebas Dart y 9 de interfaz, ambos analizadores, la captura HTTP de una VM local, la compilación release y el validador oficial de DevTools. Se retiraron los diagramas y fixtures anteriores y se sustituyeron los ejemplos por datos genéricos.
-
-La licencia es CC BY-NC 4.0 para el material propio, con atribución y conservación de los avisos de terceros. La simulación de publicación deja pendiente la URL del repositorio. Los pasos y pendientes están en [PUBLICACION.md](../PUBLICACION.md).
